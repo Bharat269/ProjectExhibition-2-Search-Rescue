@@ -6,8 +6,8 @@ from gym import spaces
 
 class RescueEnv(AECEnv):
     metadata = {"render_modes": ["human"], "name": "rescue_v0"}
-
-    def __init__(self, grid_size=5, max_steps=50):
+    OBSTACLE_COUNT = 3
+    def __init__(self, grid_size=5, max_steps=50,obst_count=OBSTACLE_COUNT):
         super().__init__()
         self.grid_size = grid_size
         self.max_steps = max_steps
@@ -17,10 +17,13 @@ class RescueEnv(AECEnv):
         self.observation_spaces = {agent: spaces.Discrete(grid_size * grid_size) for agent in self.agents}
         self.action_spaces = {agent: spaces.Discrete(4) for agent in self.agents}  # 4 directions
         self.render_mode = "human"
-
+        # self.OBSTACLE_COUNT=obst_count   
+        # self.obs_pos = [(random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) for i in range(self.OBSTACLE_COUNT)] 
+        
     def reset(self, seed=None, options=None):
         self.current_step = 0
         self.pos = {agent: [random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)] for agent in self.agents}
+        # self.obs_pos = [(random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) for i in range(self.OBSTACLE_COUNT)] 
         self.rewards = {agent: 0 for agent in self.agents}
         self.terminations = {agent: False for agent in self.agents}
         return {agent: self._get_obs(agent) for agent in self.agents}
@@ -66,3 +69,4 @@ for _ in range(10):
     actions = {agent: np.random.choice(4) for agent in env.agents}
     obs, rewards, terminations, _ = env.step(actions)
     env.render()
+print('End')
