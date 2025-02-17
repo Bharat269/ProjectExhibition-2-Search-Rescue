@@ -12,21 +12,45 @@ class RescueEnv(AECEnv):
         self.grid_size = grid_size
         self.max_steps = max_steps
         self.current_step = 0
+        
+        self.OBSTACLE_COUNT=obst_count   
+        self.obs_pos = set()
+        while len(self.obs_pos) < self.OBSTACLE_COUNT:
+            self.obs_pos.add((random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)))
+        
         self.agents = ["agent_1", "agent_2"]
-        self.pos = {agent: [random.randint(0, grid_size-1), random.randint(0, grid_size-1)] for agent in self.agents}
+        self.pos = {}
+        for agent in self.agents:
+            while True:
+                spawn = (random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1))
+                if spawn not in self.obs_pos:  # Ensure agent doesn't spawn on an obstacle
+                    self.pos[agent] = list(spawn)
+                    break
+        
         self.observation_spaces = {agent: spaces.Discrete(grid_size * grid_size) for agent in self.agents}
         self.action_spaces = {agent: spaces.Discrete(4) for agent in self.agents}  # 4 directions
         self.render_mode = "human"
-        # self.OBSTACLE_COUNT=obst_count   
-        # self.obs_pos = [(random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) for i in range(self.OBSTACLE_COUNT)] 
+        
         
     def reset(self, seed=None, options=None):
         self.current_step = 0
-        self.pos = {agent: [random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)] for agent in self.agents}
-        # self.obs_pos = [(random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)) for i in range(self.OBSTACLE_COUNT)] 
+        self.obs_pos = set()
+        
+        while len(self.obs_pos) < self.OBSTACLE_COUNT:
+            self.obs_pos.add((random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1)))
+
+        self.pos = {}
+        for agent in self.agents:
+            while True:
+                spawn = (random.randint(0, self.grid_size-1), random.randint(0, self.grid_size-1))
+                if spawn not in self.obs_pos:  # Ensure agent doesn't spawn on an obstacle
+                    self.pos[agent] = list(spawn)
+                    break
+
         self.rewards = {agent: 0 for agent in self.agents}
         self.terminations = {agent: False for agent in self.agents}
         return {agent: self._get_obs(agent) for agent in self.agents}
+
 
     def step(self, actions):
         for agent, action in actions.items():
