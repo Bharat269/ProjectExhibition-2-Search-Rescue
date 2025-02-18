@@ -51,19 +51,21 @@ class EarthquakeEnv(ParallelEnv):
         self.action_spaces = {ag:Discrete(4) for ag in self.agents}
         self.observation_spaces = {}
         
-        
+    def action_space(self, agent):   #no change needed in the inherited func
+        return super().action_space(agent)    
+    def observation_space(self, agent):     #no change needed in the inherited func
+        return super().observation_space(agent)
 
-    def display(self):
+    def displayAgent(self,agent):
         pass
-    
     def step(self, actions):
         return super().step(actions)
-    
     def render(self):
         return super().render()
-    
     def reset(self, seed = None, options = None):
         return super().reset(seed, options)
+    def state(self):
+        return super().state()
     
     
     
