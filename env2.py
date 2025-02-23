@@ -7,7 +7,7 @@ class GridParallel:
         pygame.init()
 
         # Grid size and full-screen setup
-        self.grid_size = 7  # Larger grid
+        self.grid_size = 6  # Larger grid
         self.num_obstacles = 3  # More obstacles
         self.cell_size = min(pygame.display.Info().current_w, pygame.display.Info().current_h) // self.grid_size
         self.screen = pygame.display.set_mode((self.grid_size * self.cell_size, self.grid_size * self.cell_size), pygame.FULLSCREEN)
@@ -178,5 +178,4 @@ class GridParallel:
 # Run the simulation
 env = GridParallel()
 # env.randomEnable = False # uncomment to start exploiting
-for i in range(10):
-    env.run()
+env.run()
